@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {destinations} from '../mock/destinations.js';
-import {offers} from '../mock/offers.js';
+import {destinations} from '../mock/destinations';
+import {offers} from '../mock/offers';
 
 const renderEventTypeList = (selectedType) => {
   let str = '';

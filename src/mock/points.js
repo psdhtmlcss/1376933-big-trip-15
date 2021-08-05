@@ -10,7 +10,7 @@ const generateType = () => (
 const generateOffers = (type) => {
   const MIN_OFFERS_COUNT = 1;
   const isOffers = Boolean(getRandomInteger(0, 1));
-  let selectedOffers = [];
+  const selectedOffers = [];
   if (isOffers) {
     if (offers[type].length > 0) {
       for (let i = 0; i < getRandomInteger(MIN_OFFERS_COUNT, offers[type].length); i++) {
@@ -28,7 +28,7 @@ const generateOffers = (type) => {
 const generateDateFrom = () => {
   const MAX_DAYS = 7;
   const dayGap = getRandomInteger(-MAX_DAYS, MAX_DAYS);
-  let dateFrom = dayjs().add(dayGap, 'day').toISOString();
+  const dateFrom = dayjs().add(dayGap, 'day').toISOString();
 
   return dateFrom;
 };
@@ -42,14 +42,14 @@ export const generatePoint = () => {
   const type = generateType();
 
   return {
-    "base_price": `${getRandomInteger(1, 9)}${getRandomInteger(0, 9)}0`,
-    "date_from": dateFrom,
-    "date_to": dateTo,
-    "destination": destinations[getRandomInteger(0, destinations.length - 1)],
-    "id": "0",
-    "is_favorite": Boolean(getRandomInteger(0, 1)),
-    "offers": generateOffers(type),
-    "type": type
-  }
+    'base_price': `${getRandomInteger(1, 9)}${getRandomInteger(0, 9)}0`,
+    'date_from': dateFrom,
+    'date_to': dateTo,
+    'destination': destinations[getRandomInteger(0, destinations.length - 1)],
+    'id': '0',
+    'is_favorite': Boolean(getRandomInteger(0, 1)),
+    'offers': generateOffers(type),
+    'type': type,
+  };
 
 };
