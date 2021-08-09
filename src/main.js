@@ -9,6 +9,9 @@ import MessagesTemplateView from './view/messages';
 import {generatePoint} from './mock/points';
 import {render, RenderPosition} from './utils';
 
+const Keys = {
+  ESCAPE_KEY: ['Escape', 'Esc'],
+};
 const POINT_COUNT = 22;
 const siteHeader = document.querySelector('.page-header');
 const siteMain = document.querySelector('.page-main');
@@ -32,7 +35,7 @@ const renderPoint = (container, point) => {
   };
 
   const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
+    if (Keys.ESCAPE_KEY.includes(evt.key)) {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', onEscKeyDown);
