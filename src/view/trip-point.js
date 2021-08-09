@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from '../utils';
 
 const TimeMetrics = {
   MIN_IN_HOURS: 60,
@@ -40,7 +41,7 @@ const renderEventDuration = (start, end) => {
   }
 };
 
-export const createTripPointTemplate = (point) => {
+const createTripPointTemplate = (point) => {
   const renderOffers = () => {
     let str = '';
     point.offers.forEach((item) => {
@@ -83,3 +84,26 @@ export const createTripPointTemplate = (point) => {
     </div>
   </li>`;
 };
+
+export default class TripPointTemplate {
+  constructor(point) {
+    this._element = null;
+    this._point = point;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  returnElement() {
+    this._element = null;
+  }
+}
