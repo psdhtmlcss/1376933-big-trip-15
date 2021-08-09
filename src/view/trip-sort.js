@@ -46,7 +46,7 @@ export default class SortTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

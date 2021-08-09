@@ -24,7 +24,7 @@ export default class TripInfoMainTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

@@ -140,7 +140,7 @@ export default class EditPointTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

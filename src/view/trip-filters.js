@@ -38,7 +38,7 @@ export default class FiltersTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

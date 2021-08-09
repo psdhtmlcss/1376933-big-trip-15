@@ -103,7 +103,7 @@ export default class TripPointTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

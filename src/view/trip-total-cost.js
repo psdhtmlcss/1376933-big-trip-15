@@ -23,7 +23,7 @@ export default class TripTotalCostTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

@@ -181,13 +181,13 @@ export default class NewPointTemplate {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(this.getTemplate();)
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

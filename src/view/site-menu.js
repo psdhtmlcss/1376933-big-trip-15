@@ -24,7 +24,7 @@ export default class SiteMenu {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }

@@ -21,7 +21,7 @@ export default class MessagesTemplate {
     return this._element;
   }
 
-  returnElement() {
+  removeElement() {
     this._element = null;
   }
 }
