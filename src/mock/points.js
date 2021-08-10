@@ -3,12 +3,16 @@ import {destinations} from './destinations';
 import {offers} from './offers';
 import {getRandomInteger} from '../utils';
 
+const MIN_OFFERS_COUNT = 1;
+const MAX_DAYS = 7;
+const MIN_MINUTES = 30;
+const MAX_MINUTES = 2880;
+
 const generateType = () => (
   Object.keys(offers)[getRandomInteger(0, Object.keys(offers).length - 1)]
 );
 
 const generateOffers = (type) => {
-  const MIN_OFFERS_COUNT = 1;
   const isOffers = Boolean(getRandomInteger(0, 1));
   const selectedOffers = [];
   if (isOffers) {
@@ -26,7 +30,6 @@ const generateOffers = (type) => {
 };
 
 const generateDateFrom = () => {
-  const MAX_DAYS = 7;
   const dayGap = getRandomInteger(-MAX_DAYS, MAX_DAYS);
   const dateFrom = dayjs().add(dayGap, 'day').toISOString();
 
@@ -34,8 +37,6 @@ const generateDateFrom = () => {
 };
 
 export const generatePoint = () => {
-  const MIN_MINUTES = 30;
-  const MAX_MINUTES = 48 * 60;
   const minuteGap = getRandomInteger(MIN_MINUTES, MAX_MINUTES);
   const dateFrom = generateDateFrom();
   const dateTo = dayjs(dateFrom).add(minuteGap, 'm').toISOString();
