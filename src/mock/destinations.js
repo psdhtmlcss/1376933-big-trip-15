@@ -1,4 +1,4 @@
-import {getRandomInteger} from '../utils';
+import {getRandomInteger} from '../utils/common';
 
 const MAX_LENGTH = 5;
 const MIN_PICTURES_COUNT = 1;
