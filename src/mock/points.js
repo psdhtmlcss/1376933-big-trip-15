@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {destinations} from './destinations';
 import {offers} from './offers';
-import {getRandomInteger} from '../utils';
+import {getRandomInteger} from '../utils/common';
 
 const MIN_OFFERS_COUNT = 1;
 const MAX_DAYS = 7;

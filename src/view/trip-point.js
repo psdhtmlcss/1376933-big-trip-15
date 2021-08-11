@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils';
+import AbstractView from './abstract';
 
 const TimeMetrics = {
   MIN_IN_HOURS: 60,
@@ -85,25 +85,24 @@ const createTripPointTemplate = (point) => {
   </li>`;
 };
 
-export default class TripPointTemplate {
+export default class TripPointTemplate extends AbstractView {
   constructor(point) {
-    this._element = null;
+    super();
     this._point = point;
+    this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 
   getTemplate() {
     return createTripPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

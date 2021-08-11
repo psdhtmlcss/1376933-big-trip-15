@@ -7,7 +7,7 @@ import TripPointTemplateView from './view/trip-point';
 import EditPointTemplateView from './view/edit-point';
 import MessagesTemplateView from './view/messages';
 import {generatePoint} from './mock/points';
-import {render, RenderPosition} from './utils';
+import {render, RenderPosition, replace} from './utils/render';
 
 const Keys = {
   ESCAPE_KEY: ['Escape', 'Esc'],
@@ -27,11 +27,11 @@ const renderPoint = (container, point) => {
   const editPointComponent = new EditPointTemplateView(point);
 
   const replacePointToForm = () => {
-    container.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
+    replace(editPointComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    container.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
+    replace(pointComponent, editPointComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -42,32 +42,31 @@ const renderPoint = (container, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replacePointToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editPointComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  editPointComponent.setFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  editPointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  editPointComponent.setCloseEditPointHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
-  render(container, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(container, pointComponent, RenderPosition.BEFOREEND);
 };
 
-render(tripInfoMain, new TripMainInfoTemplateView().getElement(), RenderPosition.BEFOREEND);
-render(tripInfoMain, new TripTotalCostTemplateView().getElement(), RenderPosition.BEFOREEND);
-render(siteMenu, new SiteMenuView().getElement(), RenderPosition.BEFOREEND);
-render(tripFilters, new FiltersTemplateView().getElement(), RenderPosition.BEFOREEND);
-render(tripEvents, new SortTemplateView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripInfoMain, new TripMainInfoTemplateView(), RenderPosition.BEFOREEND);
+render(tripInfoMain, new TripTotalCostTemplateView(), RenderPosition.BEFOREEND);
+render(siteMenu, new SiteMenuView(), RenderPosition.BEFOREEND);
+render(tripFilters, new FiltersTemplateView(), RenderPosition.BEFOREEND);
+render(tripEvents, new SortTemplateView(), RenderPosition.AFTERBEGIN);
 
 if (POINT_COUNT === 0) {
-  render(tripEvents, new MessagesTemplateView().getElement(), RenderPosition.BEFOREEND);
+  render(tripEvents, new MessagesTemplateView(), RenderPosition.BEFOREEND);
 } else {
   for (let i = 0; i < POINT_COUNT; i++) {
     renderPoint(tripListContainer, points[i]);
