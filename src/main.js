@@ -3,6 +3,7 @@ import TripTotalCostTemplateView from './view/trip-total-cost';
 import SiteMenuView from './view/site-menu';
 import FiltersTemplateView from './view/trip-filters';
 import SortTemplateView from './view/trip-sort';
+import TripListTemplateView from './view/trip-list';
 import TripPointTemplateView from './view/trip-point';
 import EditPointTemplateView from './view/edit-point';
 import MessagesTemplateView from './view/messages';
@@ -19,12 +20,14 @@ const tripInfoMain = siteHeader.querySelector('.trip-main__trip-info');
 const siteMenu = siteHeader.querySelector('.trip-controls__navigation');
 const tripFilters = siteHeader.querySelector('.trip-controls__filters');
 const tripEvents = siteMain.querySelector('.trip-events');
-const tripListContainer = tripEvents.querySelector('.trip-events__list');
 const points = new Array(POINT_COUNT).fill().map(generatePoint);
 
-const renderPoint = (container, point) => {
+const renderPoint = (point) => {
   const pointComponent = new TripPointTemplateView(point);
   const editPointComponent = new EditPointTemplateView(point);
+  const tripList = new TripListTemplateView();
+
+  render(tripEvents, tripList, RenderPosition.BEFOREEND);
 
   const replacePointToForm = () => {
     replace(editPointComponent, pointComponent);
@@ -56,7 +59,7 @@ const renderPoint = (container, point) => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
-  render(container, pointComponent, RenderPosition.BEFOREEND);
+  render(tripList, pointComponent, RenderPosition.BEFOREEND);
 };
 
 render(tripInfoMain, new TripMainInfoTemplateView(), RenderPosition.BEFOREEND);
@@ -69,6 +72,6 @@ if (POINT_COUNT === 0) {
   render(tripEvents, new MessagesTemplateView(), RenderPosition.BEFOREEND);
 } else {
   for (let i = 0; i < POINT_COUNT; i++) {
-    renderPoint(tripListContainer, points[i]);
+    renderPoint(points[i]);
   }
 }
