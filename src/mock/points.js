@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import {destinations} from './destinations';
 import {offers} from './offers';
 import {getRandomInteger} from '../utils/common';
+import {nanoid} from 'nanoid';
 
 const MIN_OFFERS_COUNT = 1;
 const MAX_DAYS = 7;
@@ -47,7 +48,7 @@ export const generatePoint = () => {
     'date_from': dateFrom,
     'date_to': dateTo,
     'destination': destinations[getRandomInteger(0, destinations.length - 1)],
-    'id': '0',
+    'id': nanoid(),
     'is_favorite': Boolean(getRandomInteger(0, 1)),
     'offers': generateOffers(type),
     'type': type,
