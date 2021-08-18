@@ -2,25 +2,30 @@ import SortTemplateView from '../view/trip-sort';
 import TripListTemplateView from '../view/trip-list';
 import MessagesTemplateView from '../view/messages';
 import PointPresenter from './point';
-import {updateItem} from '../utils/common.js';
+import {updateItem} from '../utils/common';
 import {render, RenderPosition} from '../utils/render';
+import {sortByDay, sortByTime, sortByPrice} from '../utils/sort';
+import {SortTypes} from '../const';
 
 
 export default class Trip {
   constructor(tripContainer) {
     this._tripContainer = tripContainer;
     this._pointPresenter = new Map();
-    this._sortComponent = new SortTemplateView();
+    this._currentSortType = SortTypes.DAY;
+    this._sortComponent = null;
     this._tripListComponent = new TripListTemplateView();
     this._noPointsComponent = new MessagesTemplateView();
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortChange = this._handleSortChange.bind(this);
   }
 
   init(points) {
     this._points = points.slice();
-    this._renderPoints(points);
+    sortByDay(this._points);
+    this._renderPoints(this._points);
   }
 
   _handlePointChange(updatedPoint) {
@@ -32,8 +37,32 @@ export default class Trip {
     this._pointPresenter.forEach((presenter) => presenter.resetView());
   }
 
+  _handleSortChange(sortType) {
+    switch (sortType) {
+      case SortTypes.DAY:
+        sortByDay(this._points);
+        break;
+      case SortTypes.TIME:
+        sortByTime(this._points);
+        break;
+      case SortTypes.PRICE:
+        sortByPrice(this._points);
+        break;
+    }
+    this._currentSortType = sortType;
+    this._clearTripList();
+    this._renderPoints(this._points);
+  }
+
   _renderSort() {
-    render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    const prevSortComponent = this._sortComponent;
+
+    this._sortComponent = new SortTemplateView();
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortChange);
+
+    if (prevSortComponent === null) {
+      render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    }
   }
 
   _clearTripList() {
