@@ -1,5 +1,5 @@
 import AbstractView from './abstract';
-import {TagNames} from '../const.js';
+import {TagNames} from '../const';
 
 const createTripSortTemplate = () => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
