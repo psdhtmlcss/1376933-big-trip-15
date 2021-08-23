@@ -4,7 +4,7 @@ import MessagesTemplateView from '../view/messages';
 import PointPresenter from './point';
 import {updateItem} from '../utils/common';
 import {render, RenderPosition} from '../utils/render';
-import {sort} from '../utils/sort';
+import {sortTypes} from '../utils/sort';
 import {SortTypes} from '../const';
 
 
@@ -24,7 +24,7 @@ export default class Trip {
 
   init(points) {
     this._points = points.slice();
-    sort['sort-day'](this._points);
+    sortTypes['sort-day'](this._points);
     this._renderPoints(this._points);
   }
 
@@ -38,7 +38,7 @@ export default class Trip {
   }
 
   _handleSortChange(sortType) {
-    sort[sortType](this._points);
+    sortTypes[sortType](this._points);
     this._currentSortType = sortType;
     this._clearTripList();
     this._renderPoints(this._points);

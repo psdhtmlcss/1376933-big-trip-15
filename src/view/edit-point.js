@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import {destinations} from '../mock/destinations';
 import {offers} from '../mock/offers';
-import AbstractView from './abstract';
+import {TagNames} from '../const';
+import SmartView from './smart';
 
 const renderEventTypeList = (selectedType) => {
   let str = '';
@@ -48,7 +49,7 @@ const renderOffersSelectors = (type, selectedOffers) => {
   }
 };
 
-const renderDestination = (city) => {
+const renderDescription = (city) => {
   const destination = destinations.find((item) => item.name === city);
   if (destination.description) {
     return `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -58,14 +59,27 @@ const renderDestination = (city) => {
   }
 };
 
-const createEditPointTemplate = (point) => (
+const renderPictures = (city) => {
+  const destination = destinations.find((item) => item.name === city);
+  if (destination.pictures) {
+    let str = '';
+    destination.pictures.forEach((picture) => {
+      str += `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
+    });
+    return `<div class="event__photos-container"><div class="event__photos-tape">${str}</div></div>`;
+  } else {
+    return '';
+  }
+};
+
+const createEditPointTemplate = (data) => (
   `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
           <label class="event__type  event__type-btn" for="event-type-toggle-1">
             <span class="visually-hidden">Choose event type</span>
-            <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
+            <img class="event__type-icon" width="17" height="17" src="img/icons/${data.type}.png" alt="Event type icon">
           </label>
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -73,16 +87,16 @@ const createEditPointTemplate = (point) => (
             <fieldset class="event__type-group">
               <legend class="visually-hidden">Event type</legend>
 
-              ${renderEventTypeList(point.type)}
+              ${renderEventTypeList(data.type)}
             </fieldset>
           </div>
         </div>
 
         <div class="event__field-group  event__field-group--destination">
           <label class="event__label  event__type-output" for="event-destination-1">
-            ${point.type}
+            ${data.type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.destination.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${data.destination.name}" list="destination-list-1">
           <datalist id="destination-list-1">
             ${renderDestinationList()}
           </datalist>
@@ -90,10 +104,10 @@ const createEditPointTemplate = (point) => (
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(point.date_from).format('DD/MM/YY hh:mm')}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs(data.date_from).format('DD/MM/YY hh:mm')}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(point.date_to).format('DD/MM/YY hh:mm')}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs(data.date_to).format('DD/MM/YY hh:mm')}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -101,7 +115,7 @@ const createEditPointTemplate = (point) => (
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.base_price}">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${data.base_price}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -112,27 +126,42 @@ const createEditPointTemplate = (point) => (
       </header>
       <section class="event__details">
         <section class="event__section  event__section--offers">
-          ${renderOffersSelectors(point.type, point.offers)}
+          ${renderOffersSelectors(data.type, data.offers)}
         </section>
         <section class="event__section  event__section--destination">
-          ${renderDestination(point.destination.name)}
+          ${renderDescription(data.destination.name)}
+          ${renderPictures(data.destination.name)}
         </section>
       </section>
     </form>
   </li>`
 );
 
-export default class EditPointTemplate extends AbstractView {
+export default class EditPointTemplate extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = EditPointTemplate.parsePointToData(point);
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditPointHandler = this._closeEditPointHandler.bind(this);
+    this._typeToggleHandler = this._typeToggleHandler.bind(this);
+    this._cityToggleHandler = this._cityToggleHandler.bind(this);
+    this._setInnerHandlers();
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setCloseEditPointHandler(this._callback.closeEditPoint);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.event__type-group').addEventListener('click', this._typeToggleHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityToggleHandler);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._callback.formSubmit();
+    this._callback.formSubmit(EditPointTemplate.parseDataToPoint(this._data));
   }
 
   setFormSubmitHandler(callback) {
@@ -150,7 +179,40 @@ export default class EditPointTemplate extends AbstractView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeEditPointHandler);
   }
 
+  _typeToggleHandler(evt) {
+    evt.preventDefault();
+    if (evt.target.tagName !== TagNames.LABEL) {
+      return;
+    }
+    this.updateData({
+      type: evt.target.textContent,
+      offers: null,
+    });
+  }
+
+  _cityToggleHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destination: {
+        description: null,
+        name: evt.target.value,
+        pictures: null,
+      },
+    });
+  }
+
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    return createEditPointTemplate(this._data);
+  }
+
+  static parsePointToData(point) {
+    return Object.assign(
+      {},
+      point,
+    );
+  }
+
+  static parseDataToPoint(data) {
+    return Object.assign({}, data);
   }
 }

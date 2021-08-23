@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-export const sort = {
+export const sortTypes = {
   'sort-day': (points) => {
     points.sort((a, b) => {
       a = new Date(a.date_from);
