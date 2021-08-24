@@ -144,6 +144,12 @@ export default class EditPointTemplate extends SmartView {
     this._setInnerHandlers();
   }
 
+  reset(point) {
+    this.updateData(
+      EditPointTemplate.parsePointToData(point),
+    );
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
