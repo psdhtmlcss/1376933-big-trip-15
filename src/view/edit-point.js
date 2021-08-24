@@ -3,6 +3,8 @@ import {destinations} from '../mock/destinations';
 import {offers} from '../mock/offers';
 import {TagNames} from '../const';
 import SmartView from './smart';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const renderEventTypeList = (selectedType) => {
   let str = '';
@@ -51,25 +53,22 @@ const renderOffersSelectors = (type, selectedOffers) => {
 
 const renderDescription = (city) => {
   const destination = destinations.find((item) => item.name === city);
-  if (destination.description) {
-    return `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>`;
-  } else {
-    return '';
+  let container = '';
+  if (destination.description || destination.pictures) {
+    container = '<h3 class="event__section-title  event__section-title--destination">Destination</h3>';
   }
-};
-
-const renderPictures = (city) => {
-  const destination = destinations.find((item) => item.name === city);
+  if (destination.description) {
+    container += `<p class="event__destination-description">${destination.description}</p>`;
+  }
   if (destination.pictures) {
     let str = '';
     destination.pictures.forEach((picture) => {
       str += `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
     });
-    return `<div class="event__photos-container"><div class="event__photos-tape">${str}</div></div>`;
-  } else {
-    return '';
+    container += `<div class="event__photos-container"><div class="event__photos-tape">${str}</div></div>`;
   }
+
+  return container;
 };
 
 const createEditPointTemplate = (data) => (
@@ -130,7 +129,6 @@ const createEditPointTemplate = (data) => (
         </section>
         <section class="event__section  event__section--destination">
           ${renderDescription(data.destination.name)}
-          ${renderPictures(data.destination.name)}
         </section>
       </section>
     </form>
@@ -141,17 +139,31 @@ export default class EditPointTemplate extends SmartView {
   constructor(point) {
     super();
     this._data = EditPointTemplate.parsePointToData(point);
+    this._datePickerStart = null;
+    this._datePickerEnd = null;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeEditPointHandler = this._closeEditPointHandler.bind(this);
     this._typeToggleHandler = this._typeToggleHandler.bind(this);
     this._cityToggleHandler = this._cityToggleHandler.bind(this);
+    this._changeStartDataHandler = this._changeStartDataHandler.bind(this);
+    this._changeEndDataHandler = this._changeEndDataHandler.bind(this);
     this._setInnerHandlers();
+    this._setDatePickerStart();
+    this._setDatePickerEnd();
+  }
+
+  reset(point) {
+    this.updateData(
+      EditPointTemplate.parsePointToData(point),
+    );
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.setCloseEditPointHandler(this._callback.closeEditPoint);
+    this._setDatePickerStart();
+    this._setDatePickerEnd();
   }
 
   _setInnerHandlers() {
@@ -198,6 +210,44 @@ export default class EditPointTemplate extends SmartView {
         name: evt.target.value,
         pictures: null,
       },
+    });
+  }
+
+  _changeStartDataHandler([userDate]) {
+    this.updateData({
+      date_from: dayjs(userDate).toISOString(),
+    });
+  }
+
+  _setDatePickerStart() {
+    if (this._datePickerStart) {
+      this._datePickerStart.destroy();
+      this._datePickerStart = null;
+    }
+
+    this._datePickerStart = flatpickr(this.getElement().querySelector('#event-start-time-1'), {
+      enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      onChange: this._changeStartDataHandler,
+    });
+  }
+
+  _changeEndDataHandler([userDate]) {
+    this.updateData({
+      date_to: dayjs(userDate).toISOString(),
+    });
+  }
+
+  _setDatePickerEnd() {
+    if (this._datePickerEnd) {
+      this._datePickerEnd.destroy();
+      this._datePickerEnd = null;
+    }
+
+    this._datePickerEnd = flatpickr(this.getElement().querySelector('#event-end-time-1'), {
+      enableTime: true,
+      dateFormat: 'd/m/y H:i',
+      onChange: this._changeEndDataHandler,
     });
   }
 

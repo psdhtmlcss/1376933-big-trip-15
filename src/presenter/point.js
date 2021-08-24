@@ -90,12 +90,14 @@ export default class Point {
   }
 
   _handleCloseEditPoint() {
+    this._editPointComponent.reset(this._point);
     this._replaceFormToPoint();
   }
 
   _escKeyDownHandle(evt) {
     if (Keys.ESCAPE_KEY.includes(evt.key)) {
       evt.preventDefault();
+      this._editPointComponent.reset(this._point);
       this._replaceFormToPoint();
       document.removeEventListener('keydown', this._escKeyDownHandle);
     }
