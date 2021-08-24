@@ -51,25 +51,22 @@ const renderOffersSelectors = (type, selectedOffers) => {
 
 const renderDescription = (city) => {
   const destination = destinations.find((item) => item.name === city);
-  if (destination.description) {
-    return `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${destination.description}</p>`;
-  } else {
-    return '';
+  let container = '';
+  if (destination.description || destination.pictures) {
+    container = '<h3 class="event__section-title  event__section-title--destination">Destination</h3>';
   }
-};
-
-const renderPictures = (city) => {
-  const destination = destinations.find((item) => item.name === city);
+  if (destination.description) {
+    container += `<p class="event__destination-description">${destination.description}</p>`;
+  }
   if (destination.pictures) {
     let str = '';
     destination.pictures.forEach((picture) => {
       str += `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
     });
-    return `<div class="event__photos-container"><div class="event__photos-tape">${str}</div></div>`;
-  } else {
-    return '';
+    container += `<div class="event__photos-container"><div class="event__photos-tape">${str}</div></div>`;
   }
+
+  return container;
 };
 
 const createEditPointTemplate = (data) => (
@@ -130,7 +127,6 @@ const createEditPointTemplate = (data) => (
         </section>
         <section class="event__section  event__section--destination">
           ${renderDescription(data.destination.name)}
-          ${renderPictures(data.destination.name)}
         </section>
       </section>
     </form>
