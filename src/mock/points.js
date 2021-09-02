@@ -44,12 +44,12 @@ export const generatePoint = () => {
   const type = generateType();
 
   return {
-    'base_price': `${getRandomInteger(1, 9)}${getRandomInteger(0, 9)}0`,
-    'date_from': dateFrom,
-    'date_to': dateTo,
+    'basePrice': `${getRandomInteger(1, 9)}${getRandomInteger(0, 9)}0`,
+    'dateFrom': dateFrom,
+    'dateTo': dateTo,
     'destination': destinations[getRandomInteger(0, destinations.length - 1)],
     'id': nanoid(),
-    'is_favorite': Boolean(getRandomInteger(0, 1)),
+    'isFavorite': Boolean(getRandomInteger(0, 1)),
     'offers': generateOffers(type),
     'type': type,
   };

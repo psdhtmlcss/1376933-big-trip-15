@@ -1,10 +1,7 @@
 import TripPointTemplateView from '../view/trip-point';
 import EditPointTemplateView from '../view/edit-point';
 import {render, RenderPosition, replace, remove} from '../utils/render';
-
-const Keys = {
-  ESCAPE_KEY: ['Escape', 'Esc'],
-};
+import {UserAction, UpdateType, Key} from '../const';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -21,6 +18,7 @@ export default class Point {
     this._mode = Mode.DEFAULT;
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._handleDeletePoint = this._handleDeletePoint.bind(this);
     this._handleCloseEditPoint = this._handleCloseEditPoint.bind(this);
     this._escKeyDownHandle = this._escKeyDownHandle.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
@@ -32,11 +30,12 @@ export default class Point {
     const prevEditPointComponent = this._editPointComponent;
 
     this._pointComponent = new TripPointTemplateView(point);
-    this._editPointComponent = new EditPointTemplateView(point);
+    this._editPointComponent = new EditPointTemplateView(point, false);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._editPointComponent.setDeletePointHandler(this._handleDeletePoint);
     this._editPointComponent.setCloseEditPointHandler(this._handleCloseEditPoint);
 
     if (prevPointComponent === null || prevEditPointComponent === null) {
@@ -85,8 +84,20 @@ export default class Point {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(point);
+    this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
     this._replaceFormToPoint();
+  }
+
+  _handleDeletePoint() {
+    this._changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MAJOR,
+      this._point,
+    );
   }
 
   _handleCloseEditPoint() {
@@ -95,7 +106,7 @@ export default class Point {
   }
 
   _escKeyDownHandle(evt) {
-    if (Keys.ESCAPE_KEY.includes(evt.key)) {
+    if (Key.ESCAPE.includes(evt.key)) {
       evt.preventDefault();
       this._editPointComponent.reset(this._point);
       this._replaceFormToPoint();
@@ -105,11 +116,13 @@ export default class Point {
 
   _handleFavoriteClick() {
     this._changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._point,
         {
-          'is_favorite': !this._point.is_favorite,
+          'isFavorite': !this._point.isFavorite,
         },
       ),
     );
