@@ -48,9 +48,7 @@ const createDestinationMock = () => {
       'pictures': generatePictures(),
     });
   });
-
   return destinationsMock;
-
 };
 
 export const destinations = createDestinationMock();
