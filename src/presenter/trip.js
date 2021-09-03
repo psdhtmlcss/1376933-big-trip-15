@@ -1,3 +1,4 @@
+import TripTemplateView from '../view/trip';
 import SortTemplateView from '../view/trip-sort';
 import TripListTemplateView from '../view/trip-list';
 import MessagesTemplateView from '../view/messages';
@@ -18,6 +19,7 @@ export default class Trip {
     this._currentSortType = SortType.DAY;
     this._filterType = FilterType.EVERYTHING;
     this._sortComponent = null;
+    this._tripComponent = new TripTemplateView();
     this._tripListComponent = new TripListTemplateView();
     this._noPointsComponent = null;
 
@@ -30,6 +32,7 @@ export default class Trip {
   }
 
   init() {
+    render(this._tripContainer, this._tripComponent, RenderPosition.AFTERBEGIN);
     this._renderPoints(this._getPoints());
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -98,7 +101,7 @@ export default class Trip {
     this._sortComponent = new SortTemplateView(sorts, this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortChange);
 
-    render(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    render(this._tripComponent, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _clearTripList({resetSortType = false} = {}) {
@@ -119,7 +122,7 @@ export default class Trip {
   }
 
   _renderTripList() {
-    render(this._tripContainer, this._tripListComponent, RenderPosition.BEFOREEND);
+    render(this._tripComponent, this._tripListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderPoints(points) {
@@ -143,6 +146,6 @@ export default class Trip {
 
   _renderMessages() {
     this._noPointsComponent = new MessagesTemplateView(this._filterType);
-    render(this._tripContainer, this._noPointsComponent, RenderPosition.BEFOREEND);
+    render(this._tripComponent, this._noPointsComponent, RenderPosition.BEFOREEND);
   }
 }

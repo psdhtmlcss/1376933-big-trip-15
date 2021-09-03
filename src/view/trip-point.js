@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract';
-import {TimeMetric} from '../const';
-
-const TEN = 10;
+import {calcEventDuration} from '../utils/common';
 
 const createTripPointOffers = (offers) => (
   `<li class="event__offer">
@@ -13,29 +11,10 @@ const createTripPointOffers = (offers) => (
 );
 
 const renderEventDuration = (start, end) => {
-  let day;
-  let hours;
-  let minutes;
   start = dayjs(start);
   end = dayjs(end);
   const eventDuration = end.diff(start, 'minutes');
-  if (eventDuration <= TimeMetric.MIN_IN_HOURS) {
-    return eventDuration < TEN ? `0${eventDuration}M` : `${eventDuration}M`;
-  } else if (eventDuration <= TimeMetric.MIN_IN_DAY) {
-    hours = Math.round(eventDuration / TimeMetric.MIN_IN_HOURS);
-    minutes = eventDuration % TimeMetric.MIN_IN_HOURS;
-    hours = hours < TEN ? `0${hours}H` : `${hours}H`;
-    minutes = minutes < TEN ? `0${minutes}M` : `${minutes}M`;
-    return `${hours} ${minutes}`;
-  } else {
-    day = Math.round(eventDuration / TimeMetric.MIN_IN_DAY);
-    hours = Math.round((eventDuration % TimeMetric.MIN_IN_DAY) / TimeMetric.MIN_IN_HOURS);
-    minutes = (eventDuration % TimeMetric.MIN_IN_DAY) % TimeMetric.MIN_IN_HOURS;
-    day = day < TEN ? `0${day}D` : `${day}D`;
-    hours = hours < TEN ? `0${hours}H` : `${hours}H`;
-    minutes = minutes < TEN ? `0${minutes}M` : `${minutes}M`;
-    return `${day} ${hours} ${minutes}`;
-  }
+  return calcEventDuration(eventDuration);
 };
 
 const createTripPointTemplate = (point) => {

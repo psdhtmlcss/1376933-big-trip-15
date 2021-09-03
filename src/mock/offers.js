@@ -1,5 +1,5 @@
 import {getRandomInteger} from '../utils/common';
-const types = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+export const types = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 const availableOffers = [
   {
     'title': 'Add luggage',
