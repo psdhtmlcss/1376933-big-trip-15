@@ -69,6 +69,12 @@ export const UpdateType = {
 
 export const TagName = {
   LABEL: 'LABEL',
+  ANCHOR: 'A',
+};
+
+export const SiteMenuName = {
+  TABLE: 'Table',
+  STATS: 'Stats',
 };
 
 export const Message = {
@@ -85,4 +91,18 @@ export const TimeMetric = {
   MIN_IN_HOURS: 60,
   MIN_IN_DAY: 1440,
   MS_IN_HOURS: 3600000,
+  MS_IN_MINUTE: 60000,
+};
+
+export const NumberSign = {
+  TEN: '10',
+};
+
+export const Color = {
+  WHITE: '#ffffff',
+  BLACK: '#000000',
+};
+
+export const CurrencySigns = {
+  EURO: '€',
 };
