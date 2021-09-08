@@ -1,3 +1,5 @@
+export const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const SortType = {
   DAY: 'sort-day',
   EVENT: 'sort-event',
@@ -65,6 +67,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const TagName = {
@@ -92,6 +95,7 @@ export const TimeMetric = {
   MIN_IN_DAY: 1440,
   MS_IN_HOURS: 3600000,
   MS_IN_MINUTE: 60000,
+  MS_IN_SECOND: 1000,
 };
 
 export const NumberSign = {

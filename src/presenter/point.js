@@ -8,11 +8,19 @@ const Mode = {
   EDITING: 'EDITING',
 };
 
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};
+
 export default class Point {
-  constructor(tripListContainer, changeData, changeMode) {
+  constructor(tripListContainer, changeData, changeMode, destinations, offers) {
     this._tripListContainer = tripListContainer;
     this._changeData = changeData;
     this._changeMode = changeMode;
+    this._destinations = destinations;
+    this._offers = offers;
     this._pointComponent = null;
     this._editPointComponent = null;
     this._mode = Mode.DEFAULT;
@@ -30,7 +38,7 @@ export default class Point {
     const prevEditPointComponent = this._editPointComponent;
 
     this._pointComponent = new TripPointTemplateView(point);
-    this._editPointComponent = new EditPointTemplateView(point, false);
+    this._editPointComponent = new EditPointTemplateView(point, false, this._destinations, this._offers);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
@@ -48,7 +56,8 @@ export default class Point {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._editPointComponent, prevEditPointComponent);
+      replace(this._pointComponent, prevEditPointComponent);
+      this._mode === Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -63,6 +72,39 @@ export default class Point {
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replaceFormToPoint();
+    }
+  }
+
+  setViewState(state) {
+    if (this._mode === Mode.DEFAULT) {
+      return;
+    }
+
+    const resetFormState = () => {
+      this._editPointComponent.updateData({
+        isDeleting: false,
+        isSaving: false,
+        isDisabled: false,
+      });
+    };
+
+    switch(state) {
+      case State.SAVING:
+        this._editPointComponent.updateData({
+          isSaving: true,
+          isDisabled: true,
+        });
+        break;
+      case State.DELETING:
+        this._editPointComponent.updateData({
+          isDeleting: true,
+          isDisabled: true,
+        });
+        break;
+      case State.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._editPointComponent.shake(resetFormState);
+        break;
     }
   }
 
@@ -89,7 +131,6 @@ export default class Point {
       UpdateType.MINOR,
       point,
     );
-    this._replaceFormToPoint();
   }
 
   _handleDeletePoint() {
