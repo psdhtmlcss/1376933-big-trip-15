@@ -1,14 +1,15 @@
 import EditPointTemplateView from '../view/edit-point';
-import {nanoid} from 'nanoid';
 import {render, RenderPosition, remove} from '../utils/render';
 import {UserAction, UpdateType, Key} from '../const';
 
 export default class NewPoint {
-  constructor(tripListContainer, changeData) {
+  constructor(tripListContainer, changeData, destinations, offers) {
     this._tripListContainer = tripListContainer;
     this._editPointComponent = null;
     this._destroyCallback = null;
     this._changeData = changeData;
+    this._destinations = destinations,
+    this._offers = offers;
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._deletePointHandler = this._deletePointHandler.bind(this);
     this._escKeyDownHandle = this._escKeyDownHandle.bind(this);
@@ -19,7 +20,7 @@ export default class NewPoint {
     if (this._editPointComponent !== null) {
       return;
     }
-    this._editPointComponent = new EditPointTemplateView();
+    this._editPointComponent = new EditPointTemplateView(undefined, true, this._destinations, this._offers);
 
     this._editPointComponent.setFormSubmitHandler(this._formSubmitHandler);
     this._editPointComponent.setDeletePointHandler(this._deletePointHandler);
@@ -45,13 +46,31 @@ export default class NewPoint {
     document.removeEventListener('keydown', this._escKeyDownHandle);
   }
 
+  setSaving() {
+    this._editPointComponent.updateData({
+      isSaving: true,
+      isDisabled: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._editPointComponent.updateData({
+        isDeleting: false,
+        isSaving: false,
+        isDisabled: false,
+      });
+    };
+
+    this._editPointComponent.shake(resetFormState);
+  }
+
   _formSubmitHandler(point) {
     this._changeData(
       UserAction.ADD_POINT,
       UpdateType.MAJOR,
-      Object.assign({id: nanoid()}, point),
+      point,
     );
-    this.destroy();
   }
 
   _deletePointHandler() {

@@ -1,7 +1,6 @@
 import AbstractView from './abstract';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import {types} from '../mock/offers';
 import {calcEventDuration} from '../utils/common';
 import {TimeMetric, Color, CurrencySigns} from '../const';
 import {calcCostPointsByType, calcTypesCount, calcTimeSpend, sortData} from '../utils/statistic';
@@ -245,9 +244,10 @@ const createStatisticTemplate = () => (
 );
 
 export default class StatisticTemplate extends AbstractView {
-  constructor(points) {
+  constructor(points, offers) {
     super();
     this._points = points;
+    this._offers = offers;
     this._moneyChart = null;
     this._typeChart = null;
     this._timeChart = null;
@@ -260,6 +260,8 @@ export default class StatisticTemplate extends AbstractView {
       this._typeChart = null;
       this._timeChart = null;
     }
+
+    const types = this._offers.map((item) => Object.values(item)[0]);
 
     const prices = types.map((type) => calcCostPointsByType(type, this._points));
     sortData(prices);
