@@ -152,6 +152,9 @@ export default class Trip {
   }
 
   _clearTripList({resetSortType = false} = {}) {
+    if (this._newPointPresenter !== null) {
+      this._newPointPresenter.destroy();
+    }
     this._pointPresenter.forEach((presenter) => presenter.destroy());
     this._pointPresenter.clear();
 

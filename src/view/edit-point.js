@@ -10,7 +10,7 @@ const BLANK_POINT = {
   dateTo: null,
   destination: null,
   isFavorite: false,
-  offers: null,
+  offers: [],
   type: null,
 };
 
@@ -261,13 +261,14 @@ export default class EditPointTemplate extends SmartView {
   }
 
   _cityToggleHandler(evt) {
+    const currentDestination = this._destinations.find((destination) => destination.name === evt.target.value);
     evt.preventDefault();
-    if (this._destinations.find((destination) => destination.name === evt.target.value)) {
+    if (currentDestination) {
       this.updateData({
         destination: {
-          description: null,
-          name: evt.target.value,
-          pictures: null,
+          description: currentDestination.description ? currentDestination.description : '',
+          name: currentDestination.name,
+          pictures: currentDestination.pictures.length ? currentDestination.pictures : [],
         },
         isDestination: true,
       });
@@ -338,7 +339,7 @@ export default class EditPointTemplate extends SmartView {
     evt.target.value = evt.target.value.replace(regexp, '');
     this.updateData(
       {
-        basePrice: evt.target.value,
+        basePrice: Number(evt.target.value),
       },
       true,
     );
