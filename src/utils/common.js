@@ -29,4 +29,3 @@ export const calcEventDuration = (time) => {
     return `${day} ${hours} ${minutes}`;
   }
 };
-

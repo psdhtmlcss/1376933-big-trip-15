@@ -1,34 +1,36 @@
 import AbstractView from './abstract';
 import {TagName} from '../const';
+import {filter} from '../utils/filter';
 
-const renderFilterItems = (filters, currentFilter) => {
+const renderFilterItems = (filterTypes, currentFilter, points) => {
   let str = '';
-  filters.forEach((filter) => {
+  filterTypes.forEach((filterType) => {
     str += `<div class="trip-filters__filter">
-      <input id="${filter.type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.name.toLowerCase()}" ${currentFilter === filter.type ? 'checked' : ''}>
-      <label class="trip-filters__filter-label" for="${filter.type}">${filter.name}</label>
+      <input id="${filterType.type}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filterType.name.toLowerCase()}" ${currentFilter === filterType.type ? 'checked' : ''} ${filter[filterType.type](points).length ? '' : 'disabled'}>
+      <label class="trip-filters__filter-label" for="${filterType.type}">${filterType.name}</label>
     </div>`;
   });
   return str;
 };
 
-const createTripFiltersTemplate = (filters, currentFilter) => (
+const createTripFiltersTemplate = (filters, currentFilter, points) => (
   `<form class="trip-filters" action="#" method="get">
-    ${renderFilterItems(filters, currentFilter)}
+    ${renderFilterItems(filters, currentFilter, points)}
     <button class="visually-hidden" type="submit">Accept filter</button>
   </form>`
 );
 
 export default class FilterTemplate extends AbstractView {
-  constructor(filters, currentFilter) {
+  constructor(filters, currentFilter, points) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilter;
+    this._points = points.getPoints();
     this._filterClickHandler = this._filterClickHandler.bind(this);
   }
 
   _filterClickHandler(evt) {
-    if (evt.target.tagName !== TagName.LABEL) {
+    if (evt.target.tagName !== TagName.LABEL || evt.target.previousElementSibling.disabled) {
       return;
     }
     this._callback.filterClick(evt.target.htmlFor);
@@ -40,6 +42,6 @@ export default class FilterTemplate extends AbstractView {
   }
 
   getTemplate() {
-    return createTripFiltersTemplate(this._filters, this._currentFilter);
+    return createTripFiltersTemplate(this._filters, this._currentFilter, this._points);
   }
 }

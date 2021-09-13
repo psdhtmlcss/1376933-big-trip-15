@@ -126,11 +126,19 @@ export default class Point {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
-      point,
-    );
+    if (point.destination.name !== this._point.destination.name
+      || point.basePrice !== this._point.basePrice
+      || Date.parse(point.dateFrom) !== Date.parse(this._point.dateFrom)
+      || Date.parse(point.dateTo) !== Date.parse(this._point.dateTo)
+      || point.offers.length !== this._point.offers.length) {
+      this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        point,
+      );
+    } else {
+      this._replaceFormToPoint();
+    }
   }
 
   _handleDeletePoint() {

@@ -18,7 +18,7 @@ export default class Filter {
   init() {
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterTemplateView(filters, this._filterModel.getFilter());
+    this._filterComponent = new FilterTemplateView(filters, this._filterModel.getFilter(), this._pointsModel);
     this._filterComponent.setFilterChangeHandler(this._handleFilterChange);
 
     if (prevFilterComponent === null) {

@@ -36,6 +36,7 @@ const renderDestinationList = (destinations, isDisabled) => {
 };
 
 const renderOffersSelectors = (type, selectedOffers, offers, isDisabled) => {
+  console.log('Выбранные оферсы', selectedOffers);
   const currentType = offers.find((element) => element.type = type);
   let str = '';
   let activeSelector = '';
@@ -256,7 +257,7 @@ export default class EditPointTemplate extends SmartView {
     }
     this.updateData({
       type: evt.target.textContent,
-      offers: null,
+      offers: [],
     });
   }
 
