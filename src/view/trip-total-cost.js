@@ -1,7 +1,6 @@
 import AbstractView from './abstract';
 
 const renderTotalCost = (points) => {
-  console.log(points);
   let totalCost = 0;
   points.forEach((point) => {
     if (point.offers.length) {
@@ -10,7 +9,6 @@ const renderTotalCost = (points) => {
       totalCost += point.basePrice;
     }
   });
-  console.log(totalCost);
   return totalCost;
 
 };

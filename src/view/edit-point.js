@@ -14,6 +14,7 @@ const BLANK_POINT = {
   type: null,
 };
 
+const createOffersStructure = (items) => items.reduce((acc, current) => Object.assign({}, acc, { [current.type]: current.offers }), {});
 
 const renderEventTypeList = (selectedType, offers, isDisabled) => {
   const types = offers.map((item) => Object.values(item)[0]);
@@ -36,12 +37,12 @@ const renderDestinationList = (destinations, isDisabled) => {
 };
 
 const renderOffersSelectors = (type, selectedOffers, offers, isDisabled) => {
-  console.log('Выбранные оферсы', selectedOffers);
-  const currentType = offers.find((element) => element.type = type);
+  const offersStructure = createOffersStructure(offers);
+  const currentType = offersStructure[type];
   let str = '';
   let activeSelector = '';
-  if (currentType.offers.length > 0) {
-    currentType.offers.forEach((item) => {
+  if (currentType.length > 0) {
+    currentType.forEach((item) => {
       const title = item.title.split(' ').join('-').toLowerCase();
       if (selectedOffers) {
         activeSelector = selectedOffers.find((element) => element.title === item.title) ? 'checked' : '';

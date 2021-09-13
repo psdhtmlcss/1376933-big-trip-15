@@ -15,7 +15,7 @@ import {showAlert} from './utils/alerts';
 import {FilterType, UpdateType, SiteMenuName} from './const';
 
 const ADDRESS = 'https://14.ecmascript.pages.academy/big-trip';
-const AUTHORIZATION = 'Basic 22basde117c%g%';
+const AUTHORIZATION = 'Basic 8basde117c%g%';
 const STORE_PREFIX = 'bigtrip-localstorage';
 const STORE_VER = 'v15';
 const StoreName = {
@@ -107,6 +107,9 @@ Promise.all([
 
 window.addEventListener('load', () => {
   navigator.serviceWorker.register('/sw.js');
+  if (!window.navigator.onLine) {
+    showAlert('There is no connection to the network');
+  }
 });
 
 window.addEventListener('offline', () => {

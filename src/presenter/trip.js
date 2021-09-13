@@ -46,7 +46,6 @@ export default class Trip {
   }
 
   init() {
-    console.log('init');
     render(this._tripContainer, this._tripComponent, RenderPosition.AFTERBEGIN);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -80,7 +79,6 @@ export default class Trip {
     this._filterType = this._filterModel.getFilter();
     const filteredPoints = filter[this._filterType](points);
     sortType[this._currentSortType](filteredPoints);
-    console.log(filteredPoints);
     return filteredPoints;
   }
 
@@ -122,29 +120,28 @@ export default class Trip {
         this._pointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        // this._clearTripMainInfo();
-        // this._clearTripTotalCost();
+        this._clearTripMainInfo();
+        this._clearTripTotalCost();
         this._clearTripList();
-        // this._renderTripMainInfo();
-        // this._renderTriptTotalCost();
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
       case UpdateType.MAJOR:
-        // this._clearTripMainInfo();
-        // this._clearTripTotalCost();
+        this._clearTripMainInfo();
+        this._clearTripTotalCost();
         this._clearTripList({resetSortType: true});
-        // this._renderTripMainInfo();
-        this._renderTriptTotalCost();
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
       case UpdateType.INIT:
-        console.log('init with data');
         this._isLoading = false;
         remove(this._loadingComponent);
         this._destinations = this._destinationsModel.destinations;
         this._offers = this._offersModel.offers;
-        // this._renderTripMainInfo();
-        // this._renderTripTotalCost();
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
     }
