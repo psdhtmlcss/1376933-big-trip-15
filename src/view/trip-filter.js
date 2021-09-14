@@ -29,13 +29,6 @@ export default class FilterTemplate extends AbstractView {
     this._filterClickHandler = this._filterClickHandler.bind(this);
   }
 
-  _filterClickHandler(evt) {
-    if (evt.target.tagName !== TagName.LABEL || evt.target.previousElementSibling.disabled) {
-      return;
-    }
-    this._callback.filterClick(evt.target.htmlFor);
-  }
-
   setFilterChangeHandler(callback) {
     this._callback.filterClick = callback;
     this.getElement().addEventListener('click', this._filterClickHandler);
@@ -43,5 +36,12 @@ export default class FilterTemplate extends AbstractView {
 
   getTemplate() {
     return createTripFiltersTemplate(this._filters, this._currentFilter, this._points);
+  }
+
+  _filterClickHandler(evt) {
+    if (evt.target.tagName !== TagName.LABEL || evt.target.previousElementSibling.disabled) {
+      return;
+    }
+    this._callback.filterClick(evt.target.htmlFor);
   }
 }

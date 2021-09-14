@@ -160,13 +160,6 @@ export default class Trip {
     this._renderPoints(this._getPoints());
   }
 
-  _renderSort() {
-    this._sortComponent = new SortTemplateView(sorts, this._currentSortType);
-    this._sortComponent.setSortTypeChangeHandler(this._handleSortChange);
-
-    render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
-  }
-
   _clearTripList({resetSortType = false} = {}) {
     if (this._newPointPresenter !== null) {
       this._newPointPresenter.destroy();
@@ -201,6 +194,13 @@ export default class Trip {
     }
   }
 
+  _renderSort() {
+    this._sortComponent = new SortTemplateView(sorts, this._currentSortType);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortChange);
+
+    render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
+  }
+
   _renderTripMainInfo() {
     const points = this._pointsModel.getPoints();
     sortType[SortType.DAY](points);
@@ -226,9 +226,9 @@ export default class Trip {
     }
 
     this._renderSort();
-    for (let i = 0; i < points.length; i++) {
-      this._renderPoint(points[i]);
-    }
+    points.forEach((point) => {
+      this._renderPoint(point);
+    });
   }
 
   _renderPoint(point) {

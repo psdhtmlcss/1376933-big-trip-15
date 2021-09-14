@@ -14,6 +14,15 @@ export default class SiteMenuTemplate extends AbstractView {
     this._toggleScreenClickHandler = this._toggleScreenClickHandler.bind(this);
   }
 
+  setToggleScreenClickHandler(callback) {
+    this._callback.toggleScreen = callback;
+    this.getElement().addEventListener('click', this._toggleScreenClickHandler);
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate();
+  }
+
   _toggleScreenClickHandler(evt) {
     evt.preventDefault();
     if (evt.target.tagName !== TagName.ANCHOR || evt.target.classList.contains('trip-tabs__btn--active')) {
@@ -22,15 +31,6 @@ export default class SiteMenuTemplate extends AbstractView {
     this.getElement().querySelector('.trip-tabs__btn--active').classList.remove('trip-tabs__btn--active');
     evt.target.classList.add('trip-tabs__btn--active');
     this._callback.toggleScreen(evt.target.textContent);
-  }
-
-  setToggleScreenClickHandler(callback) {
-    this._callback.toggleScreen = callback;
-    this.getElement().addEventListener('click', this._toggleScreenClickHandler);
-  }
-
-  getTemplate() {
-    return createSiteMenuTemplate();
   }
 }
 

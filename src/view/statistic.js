@@ -254,38 +254,36 @@ export default class StatisticTemplate extends AbstractView {
     this._setCharts();
   }
 
+  getTemplate() {
+    return createStatisticTemplate();
+  }
+
   _setCharts() {
+    const moneyCtx = this.getElement().querySelector('#money');
+    const typeCtx = this.getElement().querySelector('#type');
+    const timeCtx = this.getElement().querySelector('#time-spend');
+
+    const types = this._offers.map((item) => Object.values(item)[0]);
+    const prices = types.map((type) => calcCostPointsByType(type, this._points));
+    const typeCounts = types.map((type) => calcTypesCount(type, this._points));
+    const timeIndicators = types.map((type) => calcTimeSpend(type, this._points));
+
+    sortData(prices);
+    sortData(typeCounts);
+    sortData(timeIndicators);
+
+    moneyCtx.height = BAR_HEIGHT * prices.length;
+    typeCtx.height = BAR_HEIGHT * typeCounts.length;
+    timeCtx.height = BAR_HEIGHT * timeIndicators.length;
+
     if (this._moneyChart !== null || this._typeChart !== null || this._timeChart !== null) {
       this._moneyChart = null;
       this._typeChart = null;
       this._timeChart = null;
     }
 
-    const types = this._offers.map((item) => Object.values(item)[0]);
-
-    const prices = types.map((type) => calcCostPointsByType(type, this._points));
-    sortData(prices);
-
-    const typeCounts = types.map((type) => calcTypesCount(type, this._points));
-    sortData(typeCounts);
-
-    const timeIndicators = types.map((type) => calcTimeSpend(type, this._points));
-    sortData(timeIndicators);
-
-    const moneyCtx = this.getElement().querySelector('#money');
-    const typeCtx = this.getElement().querySelector('#type');
-    const timeCtx = this.getElement().querySelector('#time-spend');
-
-    moneyCtx.height = BAR_HEIGHT * prices.length;
-    typeCtx.height = BAR_HEIGHT * typeCounts.length;
-    timeCtx.height = BAR_HEIGHT * timeIndicators.length;
-
     this._moneyChart = renderMoneyChart(moneyCtx, prices.map((item) => Object.keys(item)[0]), prices.map((item) => Object.values(item)[0]));
     this._typeChart = renderTypeChart(typeCtx, typeCounts.map((item) => Object.keys(item)[0]), typeCounts.map((item) => Object.values(item)[0]));
     this._timeChart = renderTimeChart(timeCtx, timeIndicators.map((item) => Object.keys(item)[0]), timeIndicators.map((item) => Object.values(item)[0]));
-  }
-
-  getTemplate() {
-    return createStatisticTemplate();
   }
 }
