@@ -206,6 +206,27 @@ export default class EditPointTemplate extends SmartView {
     this._setDatePickerEnd();
   }
 
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setDeletePointHandler(callback) {
+    this._callback.deletePoint = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._deletePointHandler);
+  }
+
+  setCloseEditPointHandler(callback) {
+    if (this.getElement().querySelector('.event__rollup-btn')) {
+      this._callback.closeEditPoint = callback;
+      this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeEditPointHandler);
+    }
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._data, this._destinations, this._offers);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('click', this._typeToggleHandler);
     this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityToggleHandler);
@@ -224,31 +245,14 @@ export default class EditPointTemplate extends SmartView {
     this._callback.formSubmit(EditPointTemplate.parseDataToPoint(this._data));
   }
 
-  setFormSubmitHandler(callback) {
-    this._callback.formSubmit = callback;
-    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
-  }
-
   _deletePointHandler(evt) {
     evt.preventDefault();
     this._callback.deletePoint();
   }
 
-  setDeletePointHandler(callback) {
-    this._callback.deletePoint = callback;
-    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._deletePointHandler);
-  }
-
   _closeEditPointHandler(evt) {
     evt.preventDefault();
     this._callback.closeEditPoint();
-  }
-
-  setCloseEditPointHandler(callback) {
-    if (this.getElement().querySelector('.event__rollup-btn')) {
-      this._callback.closeEditPoint = callback;
-      this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeEditPointHandler);
-    }
   }
 
   _typeToggleHandler(evt) {
@@ -371,10 +375,6 @@ export default class EditPointTemplate extends SmartView {
         offers: selectedOffers,
       },
     );
-  }
-
-  getTemplate() {
-    return createEditPointTemplate(this._data, this._destinations, this._offers);
   }
 
   static parsePointToData(point, isNewPoint, offers) {

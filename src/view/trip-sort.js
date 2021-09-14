@@ -24,13 +24,6 @@ export default class SortTemplate extends AbstractView {
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
-  _sortTypeChangeHandler(evt) {
-    if (evt.target.id === this._currentSortType) {
-      return;
-    }
-    this._callback.sortChange(evt.target.id);
-  }
-
   setSortTypeChangeHandler(callback) {
     this._callback.sortChange = callback;
     this.getElement().addEventListener('change', this._sortTypeChangeHandler);
@@ -38,5 +31,12 @@ export default class SortTemplate extends AbstractView {
 
   getTemplate() {
     return createTripSortTemplate(this._sorts, this._currentSortType);
+  }
+
+  _sortTypeChangeHandler(evt) {
+    if (evt.target.id === this._currentSortType) {
+      return;
+    }
+    this._callback.sortChange(evt.target.id);
   }
 }

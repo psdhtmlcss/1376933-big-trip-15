@@ -10,11 +10,6 @@ export default class NewPointButtonTemplate extends AbstractView {
     this._addNewPointHandler = this._addNewPointHandler.bind(this);
   }
 
-  _addNewPointHandler(evt) {
-    evt.preventDefault();
-    this._callback.addNewPoint(evt.target);
-  }
-
   setAddNewPointHandler(callback) {
     this._callback.addNewPoint = callback;
     this.getElement().addEventListener('click', this._addNewPointHandler);
@@ -22,5 +17,10 @@ export default class NewPointButtonTemplate extends AbstractView {
 
   getTemplate() {
     return createNewPointButtonTemplate();
+  }
+
+  _addNewPointHandler(evt) {
+    evt.preventDefault();
+    this._callback.addNewPoint(evt.target);
   }
 }

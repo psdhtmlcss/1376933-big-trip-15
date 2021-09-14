@@ -110,3 +110,9 @@ export const Color = {
 export const CurrencySigns = {
   EURO: '€',
 };
+
+export const Reduction = {
+  MINUTE: 'M',
+  HOURS: 'H',
+  DAY: 'D',
+};
