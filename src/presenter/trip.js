@@ -1,3 +1,5 @@
+import TripMainInfoTemplateView from '../view/trip-info-main';
+import TripTotalCostTemplateView from '../view/trip-total-cost';
 import TripTemplateView from '../view/trip';
 import SortTemplateView from '../view/trip-sort';
 import TripListTemplateView from '../view/trip-list';
@@ -12,7 +14,8 @@ import {filter} from '../utils/filter';
 
 
 export default class Trip {
-  constructor(tripContainer, pointsModel, filterModel, destinationsModel, offersModel, api) {
+  constructor(tripInfoContainer, tripContainer, pointsModel, filterModel, destinationsModel, offersModel, api) {
+    this._tripInfoContainer = tripInfoContainer;
     this._tripContainer = tripContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
@@ -24,6 +27,8 @@ export default class Trip {
     this._filterType = FilterType.EVERYTHING;
     this._sortComponent = null;
     this._noPointsComponent = null;
+    this._tripMainInfoComponent = null;
+    this._tripTotalCostComponent = null;
     this._isLoading = true;
     this._destinations = null;
     this._offers = null;
@@ -48,6 +53,7 @@ export default class Trip {
       this._renderLoading();
       return;
     }
+
     this._renderPoints(this._getPoints());
   }
 
@@ -114,11 +120,19 @@ export default class Trip {
         this._pointPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        this._clearTripMainInfo();
+        this._clearTripTotalCost();
         this._clearTripList();
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
       case UpdateType.MAJOR:
+        this._clearTripMainInfo();
+        this._clearTripTotalCost();
         this._clearTripList({resetSortType: true});
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
       case UpdateType.INIT:
@@ -126,6 +140,8 @@ export default class Trip {
         remove(this._loadingComponent);
         this._destinations = this._destinationsModel.destinations;
         this._offers = this._offersModel.offers;
+        this._renderTripMainInfo();
+        this._renderTripTotalCost();
         this._renderPoints(this._getPoints());
         break;
     }
@@ -158,7 +174,7 @@ export default class Trip {
     this._pointPresenter.forEach((presenter) => presenter.destroy());
     this._pointPresenter.clear();
 
-    if(this._loadingComponent) {
+    if (this._loadingComponent) {
       remove(this._loadingComponent);
     }
     if (this._sortComponent !== null) {
@@ -171,6 +187,31 @@ export default class Trip {
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
     }
+  }
+
+  _clearTripMainInfo() {
+    if (this._tripMainInfoComponent !== null) {
+      remove(this._tripMainInfoComponent);
+    }
+  }
+
+  _clearTripTotalCost() {
+    if (this._tripTotalCostComponent !== null) {
+      remove(this._tripTotalCostComponent);
+    }
+  }
+
+  _renderTripMainInfo() {
+    const points = this._pointsModel.getPoints();
+    sortType[SortType.DAY](points);
+    this._tripMainInfoComponent = new TripMainInfoTemplateView(points);
+    render(this._tripInfoContainer, this._tripMainInfoComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderTripTotalCost() {
+    const points = this._pointsModel.getPoints();
+    this._tripTotalCostComponent = new TripTotalCostTemplateView(points);
+    render(this._tripInfoContainer, this._tripTotalCostComponent, RenderPosition.BEFOREEND);
   }
 
   _renderTripList() {
