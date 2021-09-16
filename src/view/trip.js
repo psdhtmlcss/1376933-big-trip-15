@@ -6,7 +6,7 @@ const createTripTemplate = () => (
   </section>`
 );
 
-export default class TripTemplate extends AbstractView {
+export default class Trip extends AbstractView {
   getTemplate() {
     return createTripTemplate();
   }

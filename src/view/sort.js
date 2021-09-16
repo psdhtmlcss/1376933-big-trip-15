@@ -16,7 +16,7 @@ const createTripSortTemplate = (sorts, currentSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">${renderSortItems(sorts, currentSortType)}</form>`
 );
 
-export default class SortTemplate extends AbstractView {
+export default class Sort extends AbstractView {
   constructor(sorts, currentSortType) {
     super();
     this._sorts = sorts,

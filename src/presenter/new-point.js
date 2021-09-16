@@ -1,4 +1,4 @@
-import EditPointTemplateView from '../view/edit-point';
+import EditPointView from '../view/edit-point';
 import {render, RenderPosition, remove} from '../utils/render';
 import {UserAction, UpdateType, Key} from '../const';
 
@@ -20,7 +20,7 @@ export default class NewPoint {
     if (this._editPointComponent !== null) {
       return;
     }
-    this._editPointComponent = new EditPointTemplateView(undefined, true, this._destinations, this._offers);
+    this._editPointComponent = new EditPointView(undefined, true, this._destinations, this._offers);
 
     this._editPointComponent.setFormSubmitHandler(this._formSubmitHandler);
     this._editPointComponent.setDeletePointHandler(this._deletePointHandler);

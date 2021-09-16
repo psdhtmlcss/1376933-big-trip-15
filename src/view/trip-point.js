@@ -61,7 +61,7 @@ const createTripPointTemplate = (point) => {
   </li>`;
 };
 
-export default class TripPointTemplate extends AbstractView {
+export default class TripPoint extends AbstractView {
   constructor(point) {
     super();
     this._point = point;

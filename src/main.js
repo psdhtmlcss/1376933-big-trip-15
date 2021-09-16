@@ -1,6 +1,6 @@
-import SiteMenuTemplateView from './view/site-menu';
-import NewPointButtonTemplateView from './view/new-point-button';
-import StatisticTemplateView from './view/statistic';
+import SiteMenuView from './view/site-menu';
+import NewPointButtonView from './view/new-point-button';
+import StatisticView from './view/statistic';
 import FilterPresenter from './presenter/filter';
 import TripPresenter from './presenter/trip';
 import FilterModel from './model/filter';
@@ -30,8 +30,8 @@ const tripInfoMain = siteHeader.querySelector('.trip-main__trip-info');
 const siteMenu = siteHeader.querySelector('.trip-controls__navigation');
 const tripFilters = siteHeader.querySelector('.trip-controls__filters');
 
-const newPointButtonComponent = new NewPointButtonTemplateView();
-const siteMenuComponent = new SiteMenuTemplateView();
+const newPointButtonComponent = new NewPointButtonView();
+const siteMenuComponent = new SiteMenuView();
 
 const api = new Api(ADDRESS, AUTHORIZATION);
 const storePoints = new Store(`${STORE_PREFIX}-${STORE_VER}-${StoreName.POINTS}`, window.localStorage);
@@ -71,7 +71,7 @@ const handleSiteMenuClick = (item) => {
     case SiteMenuName.STATS:
       tripPresenter.destroy();
       siteHeader.querySelector('.trip-main__event-add-btn').disabled = true;
-      statisticComponent = new StatisticTemplateView(pointsModel.getPoints(), offersModel.offers);
+      statisticComponent = new StatisticView(pointsModel.getPoints(), offersModel.offers);
       render(siteMain, statisticComponent, RenderPosition.BEFOREEND);
       break;
   }

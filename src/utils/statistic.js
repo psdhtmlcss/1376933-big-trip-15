@@ -13,15 +13,5 @@ export const calcTimeSpend = (type, points) => {
 };
 
 export const sortData = (types) => {
-  types.sort((a, b) => {
-    a = Object.values(a)[0];
-    b = Object.values(b)[0];
-    if (a > b) {
-      return -1;
-    } else if (a < b) {
-      return 1;
-    } else {
-      return 0;
-    }
-  });
+  types.sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
 };

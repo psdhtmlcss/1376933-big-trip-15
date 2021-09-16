@@ -1,9 +1,9 @@
-import TripMainInfoTemplateView from '../view/trip-info-main';
-import TripTotalCostTemplateView from '../view/trip-total-cost';
-import TripTemplateView from '../view/trip';
-import SortTemplateView from '../view/trip-sort';
-import TripListTemplateView from '../view/trip-list';
-import MessagesTemplateView from '../view/messages';
+import TripInfoMainView from '../view/trip-info-main';
+import TripTotalCostView from '../view/trip-total-cost';
+import TripView from '../view/trip';
+import SortView from '../view/sort';
+import TripListView from '../view/trip-list';
+import MessagesView from '../view/messages';
 import LoadingView from '../view/loading';
 import PointPresenter, {State as PointPresenterViewState} from './point';
 import NewPointPresenter from './new-point';
@@ -33,9 +33,9 @@ export default class Trip {
     this._destinations = null;
     this._offers = null;
 
-    this._tripComponent = new TripTemplateView();
+    this._tripComponent = new TripView();
     this._loadingComponent = new LoadingView();
-    this._tripListComponent = new TripListTemplateView();
+    this._tripListComponent = new TripListView();
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -195,7 +195,7 @@ export default class Trip {
   }
 
   _renderSort() {
-    this._sortComponent = new SortTemplateView(sorts, this._currentSortType);
+    this._sortComponent = new SortView(sorts, this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortChange);
 
     render(this._tripComponent, this._sortComponent, RenderPosition.AFTERBEGIN);
@@ -204,13 +204,13 @@ export default class Trip {
   _renderTripMainInfo() {
     const points = this._pointsModel.getPoints();
     sortType[SortType.DAY](points);
-    this._tripMainInfoComponent = new TripMainInfoTemplateView(points);
+    this._tripMainInfoComponent = new TripInfoMainView(points);
     render(this._tripInfoContainer, this._tripMainInfoComponent, RenderPosition.AFTERBEGIN);
   }
 
   _renderTripTotalCost() {
     const points = this._pointsModel.getPoints();
-    this._tripTotalCostComponent = new TripTotalCostTemplateView(points);
+    this._tripTotalCostComponent = new TripTotalCostView(points);
     render(this._tripInfoContainer, this._tripTotalCostComponent, RenderPosition.BEFOREEND);
   }
 
@@ -238,7 +238,7 @@ export default class Trip {
   }
 
   _renderMessages() {
-    this._noPointsComponent = new MessagesTemplateView(this._filterType);
+    this._noPointsComponent = new MessagesView(this._filterType);
     render(this._tripComponent, this._noPointsComponent, RenderPosition.BEFOREEND);
   }
 

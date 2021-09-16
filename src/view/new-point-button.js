@@ -4,7 +4,7 @@ const createNewPointButtonTemplate = () => (
   '<button class="trip-main__event-add-btn btn btn--big btn--yellow" type="button" disabled>New event</button>'
 );
 
-export default class NewPointButtonTemplate extends AbstractView {
+export default class NewPointButton extends AbstractView {
   constructor() {
     super();
     this._addNewPointHandler = this._addNewPointHandler.bind(this);

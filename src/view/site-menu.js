@@ -8,7 +8,7 @@ const createSiteMenuTemplate = () => (
   </nav>`
 );
 
-export default class SiteMenuTemplate extends AbstractView {
+export default class SiteMenu extends AbstractView {
   constructor() {
     super();
     this._toggleScreenClickHandler = this._toggleScreenClickHandler.bind(this);

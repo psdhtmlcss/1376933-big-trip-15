@@ -48,7 +48,7 @@ const createTripInfoMainTemplate = (points) => (
   </div>`
 );
 
-export default class TripInfoMainTemplate extends AbstractView {
+export default class TripInfoMain extends AbstractView {
   constructor(points) {
     super();
     this._points = points;

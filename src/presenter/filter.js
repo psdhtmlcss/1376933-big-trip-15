@@ -1,4 +1,4 @@
-import FilterTemplateView from '../view/trip-filter';
+import FilterView from '../view/filter';
 import {render, RenderPosition, replace, remove} from '../utils/render';
 import {filters, UpdateType} from '../const';
 
@@ -18,7 +18,7 @@ export default class Filter {
   init() {
     const prevFilterComponent = this._filterComponent;
 
-    this._filterComponent = new FilterTemplateView(filters, this._filterModel.getFilter(), this._pointsModel);
+    this._filterComponent = new FilterView(filters, this._filterModel.getFilter(), this._pointsModel);
     this._filterComponent.setFilterChangeHandler(this._handleFilterChange);
 
     if (prevFilterComponent === null) {

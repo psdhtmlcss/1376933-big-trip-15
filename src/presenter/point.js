@@ -1,5 +1,5 @@
-import TripPointTemplateView from '../view/trip-point';
-import EditPointTemplateView from '../view/edit-point';
+import TripPointView from '../view/trip-point';
+import EditPointView from '../view/edit-point';
 import {render, RenderPosition, replace, remove} from '../utils/render';
 import {UserAction, UpdateType, Key} from '../const';
 
@@ -37,8 +37,8 @@ export default class Point {
     const prevPointComponent = this._pointComponent;
     const prevEditPointComponent = this._editPointComponent;
 
-    this._pointComponent = new TripPointTemplateView(point);
-    this._editPointComponent = new EditPointTemplateView(point, false, this._destinations, this._offers);
+    this._pointComponent = new TripPointView(point);
+    this._editPointComponent = new EditPointView(point, false, this._destinations, this._offers);
 
     this._pointComponent.setEditClickHandler(this._handleEditClick);
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);

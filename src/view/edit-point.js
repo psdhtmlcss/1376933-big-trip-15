@@ -169,10 +169,10 @@ const createEditPointTemplate = (data, destinations, offers) => (
   </li>`
 );
 
-export default class EditPointTemplate extends SmartView {
+export default class EditPoint extends SmartView {
   constructor(point = BLANK_POINT, isNewPoint, destinations, offers) {
     super();
-    this._data = EditPointTemplate.parsePointToData(point, isNewPoint, offers);
+    this._data = EditPoint.parsePointToData(point, isNewPoint, offers);
     this._datePickerStart = null;
     this._datePickerEnd = null;
     this._destinations = destinations;
@@ -193,7 +193,7 @@ export default class EditPointTemplate extends SmartView {
 
   reset(point) {
     this.updateData(
-      EditPointTemplate.parsePointToData(point),
+      EditPoint.parsePointToData(point),
     );
   }
 
@@ -242,7 +242,7 @@ export default class EditPointTemplate extends SmartView {
       dateFrom: this._data.dateFrom ? this._data.dateFrom : dayjs(Date.now()).toISOString(),
       dateTo: this._data.dateTo ? this._data.dateTo : dayjs(Date.now()).add(1, 'hour').toISOString(),
     });
-    this._callback.formSubmit(EditPointTemplate.parseDataToPoint(this._data));
+    this._callback.formSubmit(EditPoint.parseDataToPoint(this._data));
   }
 
   _deletePointHandler(evt) {

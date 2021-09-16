@@ -19,7 +19,7 @@ const createTripTotalCostTemplate = (points) => (
   </p>`
 );
 
-export default class TripTotalCostTemplate extends AbstractView {
+export default class TripTotalCost extends AbstractView {
   constructor(points) {
     super();
     this._points = points;

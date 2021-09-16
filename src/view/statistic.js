@@ -243,7 +243,7 @@ const createStatisticTemplate = () => (
   </section>`
 );
 
-export default class StatisticTemplate extends AbstractView {
+export default class Statistic extends AbstractView {
   constructor(points, offers) {
     super();
     this._points = points;

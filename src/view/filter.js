@@ -20,7 +20,7 @@ const createTripFiltersTemplate = (filters, currentFilter, points) => (
   </form>`
 );
 
-export default class FilterTemplate extends AbstractView {
+export default class Filter extends AbstractView {
   constructor(filters, currentFilter, points) {
     super();
     this._filters = filters;
