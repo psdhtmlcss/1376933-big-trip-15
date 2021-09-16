@@ -229,7 +229,7 @@ export default class EditPointTemplate extends SmartView {
 
   _setInnerHandlers() {
     this.getElement().querySelector('.event__type-group').addEventListener('click', this._typeToggleHandler);
-    this.getElement().querySelector('.event__input--destination').addEventListener('change', this._cityToggleHandler);
+    this.getElement().querySelector('.event__input--destination').addEventListener('input', this._cityToggleHandler);
     this.getElement().querySelector('.event__input--price').addEventListener('input', this._inputPriceHandler);
     if (this.getElement().querySelector('.event__available-offers')) {
       this.getElement().querySelector('.event__available-offers').addEventListener('change', this._offerChangeHandler);
